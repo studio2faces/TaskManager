@@ -2,7 +2,10 @@ body {
     font-family: "Roboto Light", sans-serif;
     font-size: 15px;
 }
-
+.parent{
+    display: block;
+    overflow: hidden;
+}
 .child {
   /*  border: 1px solid #eee;*/
     padding: 10px;
@@ -71,4 +74,31 @@ a:last-child {
 .green{
     color: #6cb55f;
     /*font-family: "Roboto", sans-serif;*/
+}
+.add_form{
+    display: block;
+}
+
+input{
+    margin-left: 20px;
+    margin-right: 5px;
+    width: 400px;
+    color: black;
+    border: 1px solid black;
+    font-size: 12px;
+    font-family: "Roboto Light", sans-serif;
+    padding: 5px 8px;
+    text-decoration: none;
+    background-color: white;
+}
+
+button{
+    color: dodgerblue;
+    background-color: white;
+    border: 1px solid dodgerblue;
+    font-size: 12px;
+    padding: 5px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
 }
