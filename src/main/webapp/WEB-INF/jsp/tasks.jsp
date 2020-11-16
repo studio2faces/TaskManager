@@ -1,24 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--
-<%@ taglib prefix="fn" uri="http://topjava.javawebinar.ru/functions" %>--%>
-
-<%--<c:forEach items="${meals}" var="meal">
-    <jsp:useBean id="meal" type="ru.javawebinar.topjava.to.MealTo"/>
-    <tr data-mealExcess="${meal.excess}">
-        <td>
-                &lt;%&ndash;${meal.dateTime.toLocalDate()} ${meal.dateTime.toLocalTime()}&ndash;%&gt;
-                &lt;%&ndash;<%=TimeUtil.toString(meal.getDateTime())%>&ndash;%&gt;
-                &lt;%&ndash;${fn:replace(meal.dateTime, 'T', ' ')}&ndash;%&gt;
-                ${fn:formatDateTime(meal.dateTime)}
-        </td>
-        <td>${meal.description}</td>
-        <td>${meal.calories}</td>
-        <td><a href="meals?action=update&id=${meal.id}">Update</a></td>
-        <td><a href="meals?action=delete&id=${meal.id}">Delete</a></td>
-    </tr>
-</c:forEach>--%>
 
 <html>
 <head>
@@ -39,8 +21,8 @@
                     <td class="num">${task.id}</td>
                     <td>${task.description}</td>
                     <td class="buttons">
-                        <a class="up" href="/">Up</a>
-                        <a class="del" href="/">Del</a>
+                        <a class="up" href="${pageContext.request.contextPath}/tasks/update?id=${task.id}">Up</a>
+                        <a class="del" href="${pageContext.request.contextPath}/tasks/delete?id=${task.id}">Del</a>
                         <a class="done" href="${pageContext.request.contextPath}/tasks/done?id=${task.id}">Done</a>
                     </td>
                 </tr>
@@ -62,10 +44,12 @@
 </div>
 <div class="add_form">
     <h3>Add new task</h3>
-    <form action="post">
+    <jsp:useBean id="task_upd" class="team.s2f.taskmanager.model.Task" scope="request"/>
+
+    <form method="post" action="${pageContext.request.contextPath}/tasks/save">
         <form>
             <label for="desc">New task is:</label>
-            <input type="text" id="desc" name="desc">
+            <input type="text" id="desc" name="desc" value="${task_upd.description}">
             <button type="submit">Save</button>
         </form>
     </form>
