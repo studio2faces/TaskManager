@@ -14,8 +14,8 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Task save(Task task){
-        return taskRepository.save(task);
+    public void save(Task task){
+        taskRepository.save(task);
     }
 
     public Task get(int id) {
@@ -34,6 +34,4 @@ public class TaskService {
     public List<Task> getAllDone() {
         return taskRepository.getAllDone();
     }
-
-
 }

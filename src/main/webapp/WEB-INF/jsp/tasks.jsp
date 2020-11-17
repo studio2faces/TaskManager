@@ -21,7 +21,8 @@
                     <td class="num">${task.id}</td>
                     <td>${task.description}</td>
                     <td class="buttons">
-                        <a class="up" href="${pageContext.request.contextPath}/tasks/update?id=${task.id}">Up</a>
+                        <a class="up"
+                           href="${pageContext.request.contextPath}/tasks/update?action=update&id=${task.id}">Up</a>
                         <a class="del" href="${pageContext.request.contextPath}/tasks/delete?id=${task.id}">Del</a>
                         <a class="done" href="${pageContext.request.contextPath}/tasks/done?id=${task.id}">Done</a>
                     </td>
@@ -43,12 +44,12 @@
     </div>
 </div>
 <div class="add_form">
-    <h3>Add new task</h3>
     <jsp:useBean id="task_upd" class="team.s2f.taskmanager.model.Task" scope="request"/>
-
+    <h3>${param.action == 'update' ? 'Update task' : 'Add new task'}</h3>
     <form method="post" action="${pageContext.request.contextPath}/tasks/save">
         <form>
             <label for="desc">New task is:</label>
+            <input type="hidden" id="id" name="id" value="${task_upd.id}">
             <input type="text" id="desc" name="desc" value="${task_upd.description}">
             <button type="submit">Save</button>
         </form>

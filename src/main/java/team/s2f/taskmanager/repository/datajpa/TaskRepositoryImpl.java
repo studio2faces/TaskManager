@@ -15,7 +15,6 @@ public class TaskRepositoryImpl implements TaskRepository {
         this.crudTaskRepository = crudTaskRepository;
     }
 
-
     @Override
     public Task save(Task task) {
         return crudTaskRepository.save(task);
