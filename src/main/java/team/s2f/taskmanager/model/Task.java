@@ -21,6 +21,11 @@ public class Task implements Serializable {
     public Task() {
     }
 
+    public Task(Integer id, @NotBlank String description) {
+        this.id = id;
+        this.description = description;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -43,6 +48,10 @@ public class Task implements Serializable {
 
     public void setDone(boolean done) {
         isDone = done;
+    }
+
+    public boolean isNew() {
+        return this.id == null;
     }
 
     @Override

@@ -14,8 +14,13 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public void save(Task task){
-        taskRepository.save(task);
+    public Task save(Task task) {
+        if (task.isNew()) {
+            return taskRepository.save(task);
+        }
+        Task toUpdate = taskRepository.get(task.getId());
+        toUpdate.setDescription(task.getDescription());
+        return taskRepository.save(task);
     }
 
     public Task get(int id) {
@@ -33,5 +38,10 @@ public class TaskService {
 
     public List<Task> getAllDone() {
         return taskRepository.getAllDone();
+    }
+
+    public Task setDone(Task task) {
+        task.setDone(true);
+        return task;
     }
 }

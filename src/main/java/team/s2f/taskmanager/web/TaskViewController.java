@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 import team.s2f.taskmanager.model.Task;
 import team.s2f.taskmanager.service.TaskService;
 
@@ -26,58 +23,50 @@ public class TaskViewController {
     TaskService taskService;
 
     @GetMapping
-    public String getAll(HttpServletRequest request, Model model) {
-        if (request.getParameter("action") != null) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            Task taskUpd = taskService.get(id);
+    @ResponseStatus(HttpStatus.OK)
+    public String getAll(@RequestParam(required = false) String action, @RequestParam(required = false) String id, Model model) {
+        if (action != null) {
+            Task taskUpd = taskService.get(Integer.parseInt(id));
             model.addAttribute("task_upd", taskUpd);
         }
         List<Task> actual = taskService.getAllActual();
         List<Task> done = taskService.getAllDone();
         model.addAttribute("actual", actual);
         model.addAttribute("done", done);
-
         return "tasks";
     }
 
     @GetMapping("/done")
-    public String setDone(HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        Task task = taskService.get(id);
-        task.setDone(true);
-        taskService.save(task);
-        return "redirect:/tasks";
+    @ResponseStatus(HttpStatus.OK)
+    public void setDone(HttpServletRequest request, HttpServletResponse response, @RequestParam String id) throws IOException {
+        Task task = taskService.get(Integer.parseInt(id));
+        taskService.save(taskService.setDone(task));
+
+        response.sendRedirect(request.getContextPath() + "/tasks");
+        //  return "redirect:/tasks";
     }
 
     @PostMapping(path = "/save")
     @ResponseStatus(HttpStatus.OK)
-    public void save(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String description = request.getParameter("desc");
-
-        if (request.getParameterMap().containsKey("id")) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            Task toUpdate = taskService.get(id);
-            toUpdate.setDescription(description);
-            taskService.save(toUpdate);
-        } else {
-            Task task = new Task();
-            task.setDescription(description);
-            taskService.save(task);
-        }
-
+    public void save(HttpServletRequest request, HttpServletResponse response,
+                     @RequestParam(required = false) String id, @RequestParam String desc) throws IOException {
+        Task task = new Task(id.isEmpty() ? null : Integer.parseInt(id), desc);
+        taskService.save(task);
         response.sendRedirect(request.getContextPath() + "/tasks");
     }
-    
+
     @GetMapping("/update")
+    @ResponseStatus(HttpStatus.OK)
     public void update(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/tasks");
         dispatcher.forward(request, response);
     }
 
     @GetMapping("/delete")
-    public String delete(HttpServletRequest request) {
-        int id = Integer.parseInt(request.getParameter("id"));
-        taskService.delete(id);
-        return "redirect:/tasks";
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(HttpServletRequest request, HttpServletResponse response, @RequestParam String id) throws IOException {
+        taskService.delete(Integer.parseInt(id));
+        response.sendRedirect(request.getContextPath() + "/tasks");
+        //return "redirect:/tasks";
     }
 }
